@@ -1,0 +1,69 @@
+[app]
+overall = { bg = "#1a1b26" }
+
+[mgr]
+cwd = { fg = "#7aa2f7", bold = true }
+border_symbol = "│"
+border_style = { fg = "#414868" }
+symlink_target = { fg = "#7dcfff", italic = true }
+
+[indicator]
+parent  = { fg = "#414868", bg = "#1a1b26" }
+current = { fg = "#7aa2f7", bg = "#1f2335" }
+preview = { fg = "#7dcfff", bg = "#1a1b26" }
+padding = { open = " ", close = " " }
+
+[mode]
+normal_main = { fg = "#1a1b26", bg = "#7aa2f7", bold = true }
+normal_alt  = { fg = "#7aa2f7", bg = "#1f2335" }
+select_main = { fg = "#1a1b26", bg = "#9ece6a", bold = true }
+select_alt  = { fg = "#9ece6a", bg = "#1f2335" }
+unset_main  = { fg = "#1a1b26", bg = "#e0af68", bold = true }
+unset_alt   = { fg = "#e0af68", bg = "#1f2335" }
+
+[status]
+overall = { fg = "#a9b1d6", bg = "#1f2335" }
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+perm_type  = { fg = "#565f89" }
+perm_read  = { fg = "#9ece6a" }
+perm_write = { fg = "#e0af68" }
+perm_exec  = { fg = "#f7768e" }
+perm_sep   = { fg = "#414868" }
+
+[input]
+border = { fg = "#414868" }
+title = { fg = "#7aa2f7", bold = true }
+value = { fg = "#c0caf5" }
+selected = { reversed = true }
+
+[cmp]
+border = { fg = "#414868" }
+active = { fg = "#c0caf5", bg = "#283457" }
+inactive = { fg = "#565f89" }
+icon_file = ""
+icon_folder = ""
+icon_command = ""
+
+[tasks]
+border = { fg = "#414868" }
+title = { fg = "#7aa2f7", bold = true }
+hovered = { fg = "#c0caf5", bg = "#283457" }
+
+[help]
+on = { fg = "#7aa2f7" }
+run = { fg = "#c0caf5" }
+desc = { fg = "#9aa5ce" }
+hovered = { bg = "#1f2335" }
+footer = { fg = "#565f89", italic = true }
+
+[filetype]
+rules = [
+  { url = "*/", fg = "#7aa2f7", bold = true },
+  { url = "*.md", fg = "#9ece6a", italic = true },
+  { mime = "text/*", fg = "#c0caf5" },
+  { mime = "image/*", fg = "#bb9af7" },
+  { mime = "{audio,video}/*", fg = "#e0af68" },
+  { mime = "application/{json,x-yaml,toml}", fg = "#7dcfff" },
+  { url = "*", fg = "#a9b1d6" },
+]
