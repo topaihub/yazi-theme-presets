@@ -9,6 +9,7 @@ Directories:
 - `themes/`: Yazi themes
 - `starship/`: Starship prompt presets
 - `ls-colors/`: `LS_COLORS` presets consumed by `eza`
+- `eza/`: `eza` metadata themes for dates, sizes, headers, and permissions
 - `powershell/`: `$PSStyle.FileInfo.*` presets for native PowerShell output
 - `current/`: active state consumed by the shell profile
 
@@ -22,6 +23,7 @@ Current active-state files:
 
 - `current\theme.txt`
 - `current\ls-colors.ps1`
+- `current\eza\theme.yml`
 - `current\powershell.ps1`
 
 Theme coverage:
@@ -29,8 +31,59 @@ Theme coverage:
 - full terminal themes:
   - `tokyo-night`
   - `catppuccin-powerline`
-- current Yazi-only theme:
   - `mac-terminal`
+
+A full theme should include:
+
+- `themes/<theme>/theme.toml`
+- `starship/<theme>.toml`
+- `ls-colors/<theme>-ls-colors.ps1`
+- `eza/<theme>-theme.yml`
+- `powershell/<theme>-fileinfo.ps1`
+
+If any of these assets is missing, the theme should be treated as partial rather than a full terminal theme.
+
+Color-mapping rules for `eza` themes:
+
+`eza` metadata themes should not be guessed from scratch. They should be mapped from the existing theme assets.
+
+Recommended mapping:
+
+- `date`
+  - prefer the foreground color used by the `starship` time module
+  - otherwise fall back to a muted text or secondary text color from the theme
+- `header`
+  - use the main accent color of the theme
+  - for themes like `tokyo-night`, this is typically the directory or title accent
+- `size`
+  - numeric values should use a positive or emphasized file-information color
+  - units should use a muted helper color
+- `perms.read`
+  - map from Yazi `perm_read`
+- `perms.write`
+  - map from Yazi `perm_write`
+- `perms.execute`
+  - map from Yazi `perm_exec`
+- `inode` / `blocks` / `links`
+  - prefer muted helper colors so metadata does not overpower filenames
+
+Recommended source priority:
+
+1. `starship/<theme>.toml`
+2. `themes/<theme>/theme.toml`
+3. `ls-colors/<theme>-ls-colors.ps1`
+
+Notes:
+
+- `starship` is best for time color, accent color, and overall mood
+- `yazi` is best for permissions, directory color, and text hierarchy
+- `ls-colors` is useful for file-type colors, but should not be the only source for `eza` date and metadata colors
+
+Practical rule:
+
+- do not blindly copy one file's palette into another tool
+- do not invent an entirely new palette by intuition
+- always read the existing `starship` / `yazi` / `ls-colors` assets first, then map fields intentionally
 
 Related docs:
 

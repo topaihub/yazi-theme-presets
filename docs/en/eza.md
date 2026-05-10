@@ -8,8 +8,10 @@ Role:
 Color source:
 
 - `current\ls-colors.ps1`
+- `current\eza\theme.yml`
 - this loader sets `LS_COLORS`
 - `eza` reads `LS_COLORS` directly
+- `theme.yml` styles eza metadata such as dates, sizes, headers, and permissions
 
 Current shell mappings:
 

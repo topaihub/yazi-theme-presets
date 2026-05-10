@@ -24,16 +24,19 @@
 
 - `themes/tokyo-night/theme.toml`
 - `themes/catppuccin-powerline/theme.toml`
+- `themes/mac-terminal/theme.toml`
 - `ls-colors/tokyo-night-ls-colors.ps1`
 - `ls-colors/catppuccin-powerline-ls-colors.ps1`
+- `ls-colors/mac-terminal-ls-colors.ps1`
+- `eza/tokyo-night-theme.yml`
+- `eza/catppuccin-powerline-theme.yml`
+- `eza/mac-terminal-theme.yml`
 - `powershell/tokyo-night-fileinfo.ps1`
 - `powershell/catppuccin-powerline-fileinfo.ps1`
+- `powershell/mac-terminal-fileinfo.ps1`
 - `starship/tokyo-night.toml`
 - `starship/catppuccin-powerline.toml`
-
-仅 Yazi 主题：
-
-- `themes/mac-terminal/theme.toml`
+- `starship/mac-terminal.toml`
 
 当前激活状态：
 
@@ -65,6 +68,7 @@ pwsh -File .\apply-theme.ps1 catppuccin-powerline
 ```powershell
 pwsh -File .\apply-starship.ps1 tokyo-night
 pwsh -File .\apply-starship.ps1 catppuccin-powerline
+pwsh -File .\apply-starship.ps1 mac-terminal
 ```
 
 脚本会把所选预设复制到：
@@ -109,6 +113,7 @@ $env:YAZI_THEME_PRESETS_PWSH_DIR = 'D:\Your\PowerShell\Config'
 ```powershell
 pwsh -File .\apply-terminal-theme.ps1 tokyo-night
 pwsh -File .\apply-terminal-theme.ps1 catppuccin-powerline
+pwsh -File .\apply-terminal-theme.ps1 mac-terminal
 ```
 
 当前激活的 PowerShell 和 `LS_COLORS` loader 保存在：
@@ -120,6 +125,7 @@ pwsh -File .\apply-terminal-theme.ps1 catppuccin-powerline
 ## 当前 Shell 接线
 
 - `current\ls-colors.ps1` 会设置 `LS_COLORS`，供 `eza` 使用
+- `current\eza\theme.yml` 会设置 `eza` 的元数据样式，例如日期、大小、表头和权限
 - `current\powershell.ps1` 会设置 `$PSStyle.FileInfo.*`，作为 PowerShell 原生文件列表的配色
 - 如果你希望新开的 shell 自动生效，需要在 PowerShell profile 里 `dot-source` 这两个 loader
 
@@ -127,6 +133,6 @@ pwsh -File .\apply-terminal-theme.ps1 catppuccin-powerline
 
 - `tokyo-night`：完整终端主题
 - `catppuccin-powerline`：完整终端主题
-- `mac-terminal`：当前仅提供 Yazi 主题，还没有对应的 Starship、`LS_COLORS` 和 PowerShell file-info 资产
+- `mac-terminal`：完整终端主题
 
 切换后，重新打开一个 PowerShell 会话，或者执行 `. $PROFILE`。

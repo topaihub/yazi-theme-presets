@@ -21,16 +21,19 @@ Full terminal themes:
 
 - `themes/tokyo-night/theme.toml`
 - `themes/catppuccin-powerline/theme.toml`
+- `themes/mac-terminal/theme.toml`
 - `ls-colors/tokyo-night-ls-colors.ps1`
 - `ls-colors/catppuccin-powerline-ls-colors.ps1`
+- `ls-colors/mac-terminal-ls-colors.ps1`
+- `eza/tokyo-night-theme.yml`
+- `eza/catppuccin-powerline-theme.yml`
+- `eza/mac-terminal-theme.yml`
 - `powershell/tokyo-night-fileinfo.ps1`
 - `powershell/catppuccin-powerline-fileinfo.ps1`
+- `powershell/mac-terminal-fileinfo.ps1`
 - `starship/tokyo-night.toml`
 - `starship/catppuccin-powerline.toml`
-
-Yazi-only theme:
-
-- `themes/mac-terminal/theme.toml`
+- `starship/mac-terminal.toml`
 
 Active state:
 
@@ -62,6 +65,7 @@ From this directory:
 ```powershell
 pwsh -File .\apply-starship.ps1 tokyo-night
 pwsh -File .\apply-starship.ps1 catppuccin-powerline
+pwsh -File .\apply-starship.ps1 mac-terminal
 ```
 
 The script copies the selected preset to:
@@ -106,6 +110,7 @@ From this directory:
 ```powershell
 pwsh -File .\apply-terminal-theme.ps1 tokyo-night
 pwsh -File .\apply-terminal-theme.ps1 catppuccin-powerline
+pwsh -File .\apply-terminal-theme.ps1 mac-terminal
 ```
 
 The active PowerShell and `LS_COLORS` loaders are stored in:
@@ -117,6 +122,7 @@ The active PowerShell and `LS_COLORS` loaders are stored in:
 ## Current Shell Integration
 
 - `current\ls-colors.ps1` sets `LS_COLORS`, which is consumed by `eza`
+- `current\eza\theme.yml` styles `eza` metadata such as dates, sizes, headers, and permissions
 - `current\powershell.ps1` sets `$PSStyle.FileInfo.*` for native PowerShell file listings
 - your PowerShell profile needs to dot-source both loaders if you want the preset active in new shells
 
@@ -124,6 +130,6 @@ The active PowerShell and `LS_COLORS` loaders are stored in:
 
 - `tokyo-night`: full terminal theme
 - `catppuccin-powerline`: full terminal theme
-- `mac-terminal`: Yazi-only preset today; it does not currently include matching Starship, `LS_COLORS`, or PowerShell file-info assets
+- `mac-terminal`: full terminal theme
 
 Open a new PowerShell session or run `. $PROFILE` after switching.

@@ -8,8 +8,10 @@
 配色来源：
 
 - `current\ls-colors.ps1`
+- `current\eza\theme.yml`
 - 这份 loader 会设置 `LS_COLORS`
 - `eza` 会直接读取 `LS_COLORS`
+- `theme.yml` 用来控制 `eza` 的元数据样式，例如日期、大小、表头和权限
 
 当前 shell 映射：
 

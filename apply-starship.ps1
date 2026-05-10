@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("tokyo-night", "catppuccin-powerline")]
+    [ValidateSet("tokyo-night", "catppuccin-powerline", "mac-terminal")]
     [string]$Theme
 )
 

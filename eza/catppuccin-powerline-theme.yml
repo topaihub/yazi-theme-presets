@@ -1,0 +1,64 @@
+date:
+  foreground: "#b4befe"
+
+size:
+  number_byte:
+    foreground: "#a6e3a1"
+  number_kilo:
+    foreground: "#a6e3a1"
+  number_mega:
+    foreground: "#a6e3a1"
+  number_giga:
+    foreground: "#a6e3a1"
+  unit_byte:
+    foreground: "#6c7086"
+  unit_kilo:
+    foreground: "#6c7086"
+  unit_mega:
+    foreground: "#6c7086"
+  unit_giga:
+    foreground: "#6c7086"
+
+perms:
+  user_read:
+    foreground: "#a6e3a1"
+  user_write:
+    foreground: "#f9e2af"
+  user_execute_file:
+    foreground: "#f38ba8"
+  user_execute_other:
+    foreground: "#f38ba8"
+  group_read:
+    foreground: "#a6e3a1"
+  group_write:
+    foreground: "#f9e2af"
+  group_execute:
+    foreground: "#f38ba8"
+  other_read:
+    foreground: "#a6e3a1"
+  other_write:
+    foreground: "#f9e2af"
+  other_execute:
+    foreground: "#f38ba8"
+  no_access:
+    foreground: "#45475a"
+  octal:
+    foreground: "#6c7086"
+  acl:
+    foreground: "#74c7ec"
+  context:
+    foreground: "#6c7086"
+
+links:
+  normal:
+    foreground: "#6c7086"
+
+inode:
+  foreground: "#6c7086"
+
+blocks:
+  foreground: "#6c7086"
+
+header:
+  foreground: "#fab387"
+  is_bold: true
