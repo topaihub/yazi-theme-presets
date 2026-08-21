@@ -13,11 +13,25 @@
 - `powershell/`：供 PowerShell 原生文件列表使用的 `$PSStyle.FileInfo.*` 预设
 - `current/`：shell profile 读取的当前激活状态
 
+- `lib/`：三个 apply 脚本共用的路径解析与备份逻辑
+
 脚本说明：
 
 - `apply-theme.ps1`：只应用 Yazi 主题
 - `apply-starship.ps1`：只应用 Starship 主题
 - `apply-terminal-theme.ps1`：应用整套终端主题
+- `test.ps1`：仓库不变量检查，改完跑一次
+
+加新主题只加目录，不改脚本：
+
+主题清单由 `lib/paths.ps1` 的 `Get-AvailableThemes` 从 `themes/` 读出来。
+之前三个脚本里各写一份 `ValidateSet`，加主题要改三处 —— 漏掉的那个脚本会把
+新主题当非法值拒掉。`test.ps1` 会断言脚本里不再出现 `ValidateSet`。
+
+`current/` 不进版本库：
+
+它是运行时状态，apply 脚本每次都覆写。追踪它的现象是应用一次主题工作区就脏，
+下次 `git pull` 撞一个「他选了什么主题 vs 提交时选了什么主题」的无意义冲突。
 
 当前激活文件：
 
@@ -86,6 +100,6 @@
 关联文档：
 
 - [工具链总览](./toolchain-overview.md)
-- [Yazi](../yazi.md)
-- [eza](../eza.md)
-- [PowerShell Profile](../powershell-profile.md)
+- [Yazi](./yazi.md)
+- [eza](./eza.md)
+- [PowerShell Profile](./powershell-profile.md)

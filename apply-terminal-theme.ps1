@@ -1,67 +1,83 @@
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("tokyo-night", "catppuccin-powerline", "mac-terminal")]
     [string]$Theme
 )
 
-function Get-PowerShellConfigDir {
-    if ($env:YAZI_THEME_PRESETS_PWSH_DIR) {
-        return $env:YAZI_THEME_PRESETS_PWSH_DIR
-    }
-
-    if ($env:STARSHIP_CONFIG) {
-        return Split-Path -Parent $env:STARSHIP_CONFIG
-    }
-
-    return Split-Path -Parent $PROFILE
-}
+$ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $root "lib\paths.ps1")
 
-$starshipSource = Join-Path $root ("starship\" + $Theme + ".toml")
+Assert-ThemeName -Root $root -Theme $Theme
+
+$assets = Get-ThemeAssets -Root $root -Theme $Theme
+
 $starshipTargetDir = Get-PowerShellConfigDir
-$starshipTarget = Join-Path $starshipTargetDir "starship.toml"
-
-$yaziSource = Join-Path $root ("themes\" + $Theme + "\theme.toml")
 $yaziTargetDir = Join-Path $env:APPDATA "yazi\config"
-$yaziTarget = Join-Path $yaziTargetDir "theme.toml"
+$currentDir = Join-Path $root "current"
+$ezaTargetDir = Join-Path $currentDir "eza"
 
-$ezaSource = Join-Path $root ("eza\" + $Theme + "-theme.yml")
-$ezaTargetDir = Join-Path $root "current\eza"
-$ezaTarget = Join-Path $ezaTargetDir "theme.yml"
+# 目标 -> 源。五份一起换，所以下面按这张表统一处理，不再五行一模一样的 Copy-Item。
+$plan = [ordered]@{
+    (Join-Path $starshipTargetDir "starship.toml") = $assets.starship
+    (Join-Path $yaziTargetDir "theme.toml")        = $assets.yazi
+    (Join-Path $ezaTargetDir "theme.yml")          = $assets.eza
+    (Join-Path $currentDir "ls-colors.ps1")        = $assets.lsColors
+    (Join-Path $currentDir "powershell.ps1")       = $assets.pwsh
+}
 
-$lsColorsSource = Join-Path $root ("ls-colors\" + $Theme + "-ls-colors.ps1")
-$lsColorsTarget = Join-Path $root "current\ls-colors.ps1"
-
-$pwshSource = Join-Path $root ("powershell\" + $Theme + "-fileinfo.ps1")
-$pwshTarget = Join-Path $root "current\powershell.ps1"
-
-$themeMarker = Join-Path $root "current\theme.txt"
-
-$required = @($starshipSource, $yaziSource, $ezaSource, $lsColorsSource, $pwshSource)
-foreach ($path in $required) {
+foreach ($path in $assets.Values) {
     if (-not (Test-Path -LiteralPath $path)) {
         throw "Theme asset not found: $path"
     }
 }
 
-New-Item -Path (Split-Path -Parent $lsColorsTarget) -ItemType Directory -Force | Out-Null
-New-Item -Path $ezaTargetDir -ItemType Directory -Force | Out-Null
-New-Item -Path $starshipTargetDir -ItemType Directory -Force | Out-Null
-New-Item -Path $yaziTargetDir -ItemType Directory -Force | Out-Null
+foreach ($dir in @($starshipTargetDir, $yaziTargetDir, $currentDir, $ezaTargetDir)) {
+    New-Item -Path $dir -ItemType Directory -Force | Out-Null
+}
 
-Copy-Item -LiteralPath $starshipSource -Destination $starshipTarget -Force
-Copy-Item -LiteralPath $yaziSource -Destination $yaziTarget -Force
-Copy-Item -LiteralPath $ezaSource -Destination $ezaTarget -Force
-Copy-Item -LiteralPath $lsColorsSource -Destination $lsColorsTarget -Force
-Copy-Item -LiteralPath $pwshSource -Destination $pwshTarget -Force
-Set-Content -LiteralPath $themeMarker -Value $Theme
+$starshipTarget = Join-Path $starshipTargetDir "starship.toml"
+$starshipPresets = Get-AvailableThemes -Root $root | ForEach-Object {
+    Join-Path $root ("starship\" + $_ + ".toml")
+}
+$backup = Backup-IfUserModified -Target $starshipTarget -KnownPresets $starshipPresets
+
+# 先全部落成 .tmp，五个都成了再逐个改名。
+#
+# 之前是连着五个 Copy-Item -Force。第三个失败（文件被占、目录突然不可写）时
+# 前两个已经写进去了 —— starship 和 yazi 是新主题、eza 还是旧的，用户看到的
+# 是配色对不上。改名这一步几乎不会失败，所以两段式能把「只换了一半」的
+# 窗口压到可以忽略。
+$staged = [ordered]@{}
+try {
+    foreach ($target in $plan.Keys) {
+        $tmp = "$target.tmp"
+        Copy-Item -LiteralPath $plan[$target] -Destination $tmp -Force
+        $staged[$target] = $tmp
+    }
+}
+catch {
+    # 半套 .tmp 留在用户目录里没意义，清掉再把原错误抛出去。
+    foreach ($tmp in $staged.Values) {
+        Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue
+    }
+    throw
+}
+
+foreach ($target in $staged.Keys) {
+    Move-Item -LiteralPath $staged[$target] -Destination $target -Force
+}
+
+# 标记最后写：五份都换成了才算换了主题。
+Set-Content -LiteralPath (Join-Path $currentDir "theme.txt") -Value $Theme
 
 Write-Host ("Applied terminal theme: " + $Theme)
-Write-Host ("Starship: " + $starshipTarget)
-Write-Host ("Yazi: " + $yaziTarget)
-Write-Host ("eza theme: " + $ezaTarget)
-Write-Host ("LS_COLORS loader: " + $lsColorsTarget)
-Write-Host ("PowerShell file-info loader: " + $pwshTarget)
+foreach ($target in $plan.Keys) {
+    Write-Host ("  " + $target)
+}
+if ($backup) {
+    Write-Host ("Backed up your previous Starship config: " + $backup)
+}
 Write-Host "Target resolution: repo assets use relative source paths; user config targets are resolved from YAZI_THEME_PRESETS_PWSH_DIR, STARSHIP_CONFIG, PROFILE, and APPDATA"
-Write-Host "Open a new PowerShell session or run . `$PROFILE"
+Write-Host ""
+Write-Warning "Open a new PowerShell session, or run: . `$PROFILE"

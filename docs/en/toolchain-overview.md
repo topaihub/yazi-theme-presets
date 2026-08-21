@@ -4,10 +4,10 @@ This workspace uses a split terminal theme toolchain instead of a single monolit
 
 Components:
 
-- [Yazi](../yazi.md): interactive file manager
-- [eza](../eza.md): `ls` / `ll` / `la` renderer with icons
-- [Starship](../starship.md): prompt renderer
-- [PowerShell Profile](../powershell-profile.md): shell startup, aliases, and loader wiring
+- [Yazi](./yazi.md): interactive file manager
+- [eza](./eza.md): `ls` / `ll` / `la` renderer with icons
+- [Starship](./starship.md): prompt renderer
+- [PowerShell Profile](./powershell-profile.md): shell startup, aliases, and loader wiring
 - [Theme Presets Repo](./theme-presets.md): theme assets and apply scripts
 
 Theme flow:
@@ -28,11 +28,8 @@ Current command conventions:
 - `ll` -> `eza --icons=auto --group-directories-first --long --all`
 - `la` -> `eza --icons=auto --group-directories-first --all`
 
-Current full terminal themes:
+Current full terminal themes (all three carry the five assets; `test.ps1` checks this):
 
 - `tokyo-night`
 - `catppuccin-powerline`
-
-Current Yazi-only theme:
-
 - `mac-terminal`

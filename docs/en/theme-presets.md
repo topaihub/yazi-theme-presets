@@ -12,12 +12,27 @@ Directories:
 - `eza/`: `eza` metadata themes for dates, sizes, headers, and permissions
 - `powershell/`: `$PSStyle.FileInfo.*` presets for native PowerShell output
 - `current/`: active state consumed by the shell profile
+- `lib/`: path resolution and backup logic shared by the three apply scripts
 
 Scripts:
 
 - `apply-theme.ps1`: apply only a Yazi theme
 - `apply-starship.ps1`: apply only a Starship theme
 - `apply-terminal-theme.ps1`: apply the full terminal theme
+- `test.ps1`: repo invariant checks — run it after making changes
+
+Adding a theme means adding a directory, not editing scripts:
+
+The theme list comes from `Get-AvailableThemes` in `lib/paths.ps1`, which reads
+`themes/`. Each of the three scripts used to carry its own `ValidateSet`, so adding a
+theme meant editing three places — and whichever script you missed would reject the new
+theme as an invalid value. `test.ps1` asserts no `ValidateSet` remains.
+
+`current/` is not tracked:
+
+It is runtime state that the apply scripts overwrite every run. Tracking it means
+applying a theme dirties your working tree, and the next `git pull` hits a meaningless
+conflict between the theme you picked and the theme that was committed.
 
 Current active-state files:
 
@@ -88,6 +103,6 @@ Practical rule:
 Related docs:
 
 - [Toolchain Overview](./toolchain-overview.md)
-- [Yazi](../yazi.md)
-- [eza](../eza.md)
-- [PowerShell Profile](../powershell-profile.md)
+- [Yazi](./yazi.md)
+- [eza](./eza.md)
+- [PowerShell Profile](./powershell-profile.md)
