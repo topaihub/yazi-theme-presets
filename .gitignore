@@ -1,1 +1,10 @@
-current/theme.txt
+# current/ 是运行时状态，不是仓库资产。
+#
+# 之前只忽略了 theme.txt，另外三个文件（ls-colors.ps1、eza/theme.yml、
+# powershell.ps1）是追踪的，而 apply-terminal-theme.ps1 每次都覆写它们。
+# 现象是用户 apply 一个主题之后 git status 就脏了，下次 pull 撞一个
+# 「他选了什么主题 vs 提交时选了什么主题」的无意义冲突。
+current/
+
+# 覆盖用户已有 starship.toml 之前留的备份，见 apply-starship.ps1。
+*.bak-*
