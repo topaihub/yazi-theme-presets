@@ -7,11 +7,17 @@ Role:
 
 Color source:
 
-- `current\ls-colors.ps1`
-- `current\eza\theme.yml`
-- this loader sets `LS_COLORS`
-- `eza` reads `LS_COLORS` directly
-- `theme.yml` styles eza metadata such as dates, sizes, headers, and permissions
+- `current\ls-colors.ps1` sets `LS_COLORS`, which `eza` reads directly — this drives
+  file-type colors
+- `current\eza\theme.yml` styles eza metadata such as dates, sizes, headers, and
+  permissions
+
+Two channels, and the second one needs a variable:
+
+`eza` only reads `theme.yml` from `$EZA_CONFIG_DIR`. Copying the file into
+`current\eza\` is not enough — without the variable those mapped colors never take
+effect. `current\ls-colors.ps1` sets it (that loader is already dot-sourced by the
+profile, so nothing else has to change), and `test.ps1` asserts every loader does.
 
 Current shell mappings:
 

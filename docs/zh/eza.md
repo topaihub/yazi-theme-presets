@@ -7,11 +7,15 @@
 
 配色来源：
 
-- `current\ls-colors.ps1`
-- `current\eza\theme.yml`
-- 这份 loader 会设置 `LS_COLORS`
-- `eza` 会直接读取 `LS_COLORS`
-- `theme.yml` 用来控制 `eza` 的元数据样式，例如日期、大小、表头和权限
+- `current\ls-colors.ps1` 设置 `LS_COLORS`，`eza` 直接读它 —— 这条管文件类型色
+- `current\eza\theme.yml` 控制 `eza` 的元数据样式，例如日期、大小、表头和权限
+
+两条通道，第二条需要一个变量：
+
+`eza` 只从 `$EZA_CONFIG_DIR` 读 `theme.yml`。光把文件复制到 `current\eza\` 不够 ——
+不设这个变量，那份映射过的颜色一个都不生效。现在由 `current\ls-colors.ps1` 设置
+（那个 loader 本来就被 profile dot-source 了，别处不用改），`test.ps1` 会断言
+每个 loader 都设了它。
 
 当前 shell 映射：
 

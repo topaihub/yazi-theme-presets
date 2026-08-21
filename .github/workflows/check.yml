@@ -1,0 +1,16 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  invariants:
+    # windows-latest 自带 pwsh。用 ubuntu 也能跑（PowerShell 跨平台），
+    # 但这个仓库的目标平台是 Windows，检查也该在那上面跑。
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: repo invariants
+        shell: pwsh
+        run: ./test.ps1

@@ -2,10 +2,10 @@
 
 这个工作区的终端主题不是单一工具完成的，而是拆成几段协作：
 
-- [Yazi](../yazi.md)：交互式文件管理器
-- [eza](../eza.md)：`ls` / `ll` / `la` 列表渲染与图标
-- [Starship](../starship.md)：提示符渲染
-- [PowerShell Profile](../powershell-profile.md)：shell 启动、别名和 loader 接线
+- [Yazi](./yazi.md)：交互式文件管理器
+- [eza](./eza.md)：`ls` / `ll` / `la` 列表渲染与图标
+- [Starship](./starship.md)：提示符渲染
+- [PowerShell Profile](./powershell-profile.md)：shell 启动、别名和 loader 接线
 - [主题预设仓库](./theme-presets.md)：主题资产和应用脚本
 
 主题生效链路：
@@ -26,11 +26,8 @@
 - `ll` -> `eza --icons=auto --group-directories-first --long --all`
 - `la` -> `eza --icons=auto --group-directories-first --all`
 
-当前完整终端主题：
+当前完整终端主题（三个都齐五份资产，`test.ps1` 会检查）：
 
 - `tokyo-night`
 - `catppuccin-powerline`
-
-当前仅 Yazi 主题：
-
 - `mac-terminal`

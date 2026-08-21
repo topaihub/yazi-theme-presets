@@ -13,7 +13,6 @@ It also carries the Starship presets plus the loader scripts used by PowerShell 
 - [English eza Guide](./docs/en/eza.md)
 - [English Starship Guide](./docs/en/starship.md)
 - [English PowerShell Profile Guide](./docs/en/powershell-profile.md)
-- [Theme Presets Repo](./docs/theme-presets.md)
 
 ## Included Themes
 
@@ -78,6 +77,12 @@ or
 $PROFILE directory\starship.toml
 ```
 
+**If the target is a `starship.toml` you hand-tuned, it is backed up first** as
+`starship.toml.bak-<timestamp>`. Overwriting it is the only irreversible operation in
+this repo. No backup is made when the content matches one of the presets — that is what
+a previous apply left behind, and re-backing it up would just pile up identical files in
+your config directory.
+
 Open a new PowerShell session or run `. $PROFILE` after switching.
 
 To force the PowerShell config directory to a custom location:
@@ -119,12 +124,34 @@ The active PowerShell and `LS_COLORS` loaders are stored in:
 <repo>\current
 ```
 
+The full apply is **two-phase**: all five assets are written as `.tmp` first, then renamed
+once every copy succeeded. A failure partway through (file in use, directory suddenly not
+writable) no longer leaves you with "starship and yazi switched, eza still on the old
+theme" — a half-applied state that shows up as colors that do not match.
+
+`current/` is not tracked; it is runtime state.
+
 ## Current Shell Integration
 
-- `current\ls-colors.ps1` sets `LS_COLORS`, which is consumed by `eza`
-- `current\eza\theme.yml` styles `eza` metadata such as dates, sizes, headers, and permissions
+- `current\ls-colors.ps1` sets `LS_COLORS` (consumed by `eza`) **and `EZA_CONFIG_DIR`**
+- `current\eza\theme.yml` styles `eza` metadata such as dates, sizes, headers, and
+  permissions — it only takes effect when `EZA_CONFIG_DIR` points at it, which is why the
+  loader above sets that variable too
 - `current\powershell.ps1` sets `$PSStyle.FileInfo.*` for native PowerShell file listings
 - your PowerShell profile needs to dot-source both loaders if you want the preset active in new shells
+
+## Checks
+
+Run this after making changes:
+
+```powershell
+pwsh -File .\test.ps1
+```
+
+It verifies that every theme carries its five assets, that the theme list has not been
+hard-coded back into the scripts, that every loader sets `EZA_CONFIG_DIR`, that `current/`
+is untracked, and that theme names mentioned in the docs actually exist. CI runs the same
+script (see `.github/workflows/check.yml`).
 
 ## Theme Coverage
 
